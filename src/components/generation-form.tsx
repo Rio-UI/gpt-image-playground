@@ -2,7 +2,7 @@
 
 import { ModeToggle } from '@/components/mode-toggle';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider } from '@/components/ui/slider';
@@ -128,9 +128,6 @@ export function GenerationForm({
             <CardHeader className='flex items-start justify-between border-b border-white/10 pb-4'>
                 <div>
                     <CardTitle className='text-lg font-medium text-white'>Generate Image</CardTitle>
-                    <CardDescription className='mt-1 text-white/60'>
-                        Create a new image from a text prompt using gpt-image-1.
-                    </CardDescription>
                 </div>
                 <ModeToggle currentMode={currentMode} onModeChange={onModeChange} />
             </CardHeader>
