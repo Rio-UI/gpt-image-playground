@@ -73,10 +73,10 @@ const RadioItemWithIcon = ({
         <RadioGroupItem
             value={value}
             id={id}
-            className='border-white/40 text-white data-[state=checked]:border-white data-[state=checked]:text-white'
+            className='border-neutral-600 text-neutral-100 data-[state=checked]:border-neutral-200 data-[state=checked]:text-neutral-100'
         />
-        <Label htmlFor={id} className='flex cursor-pointer items-center gap-2 text-base text-white/80'>
-            <Icon className='h-5 w-5 text-white/60' />
+        <Label htmlFor={id} className='flex cursor-pointer items-center gap-2 text-base text-neutral-300'>
+            <Icon className='h-5 w-5 text-neutral-400' />
             {label}
         </Label>
     </div>
@@ -124,11 +124,11 @@ export function GenerationForm({
     };
 
     return (
-        <Card className='flex h-full w-full flex-col overflow-hidden rounded-lg border border-white/10 bg-black'>
-            <CardHeader className='flex items-start justify-between border-b border-white/10 pb-4'>
+        <Card className='flex h-full w-full flex-col overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900'>
+            <CardHeader className='flex items-start justify-between border-b border-neutral-800 pb-4'>
                 <div>
-                    <CardTitle className='text-lg font-medium text-white'>Generate Image</CardTitle>
-                    <CardDescription className='mt-1 text-white/60'>
+                    <CardTitle className='text-lg font-medium text-neutral-100'>Generate Image</CardTitle>
+                    <CardDescription className='mt-1 text-neutral-400'>
                         Create a new image from a text prompt using gpt-image-1.
                     </CardDescription>
                 </div>
@@ -137,7 +137,7 @@ export function GenerationForm({
             <form onSubmit={handleSubmit} className='flex h-full flex-1 flex-col overflow-hidden'>
                 <CardContent className='flex-1 space-y-5 overflow-y-auto p-4'>
                     <div className='space-y-1.5'>
-                        <Label htmlFor='prompt' className='text-white'>
+                        <Label htmlFor='prompt' className='text-neutral-100'>
                             Prompt
                         </Label>
                         <Textarea
@@ -147,12 +147,12 @@ export function GenerationForm({
                             onChange={(e) => setPrompt(e.target.value)}
                             required
                             disabled={isLoading}
-                            className='min-h-[80px] rounded-md border border-white/20 bg-black text-white placeholder:text-white/40 focus:border-white/50 focus:ring-white/50'
+                            className='min-h-[80px] rounded-md border border-neutral-700 bg-neutral-800 text-neutral-100 placeholder:text-neutral-500 focus:border-neutral-600 focus:ring-neutral-600'
                         />
                     </div>
 
                     <div className='space-y-2'>
-                        <Label htmlFor='n-slider' className='text-white'>
+                        <Label htmlFor='n-slider' className='text-neutral-100'>
                             Number of Images: {n[0]}
                         </Label>
                         <Slider
@@ -168,7 +168,7 @@ export function GenerationForm({
                     </div>
 
                     <div className='space-y-3'>
-                        <Label className='block text-white'>Size</Label>
+                        <Label className='block text-neutral-100'>Size</Label>
                         <RadioGroup
                             value={size}
                             onValueChange={(value) => setSize(value as GenerationFormData['size'])}
@@ -192,7 +192,7 @@ export function GenerationForm({
                     </div>
 
                     <div className='space-y-3'>
-                        <Label className='block text-white'>Quality</Label>
+                        <Label className='block text-neutral-100'>Quality</Label>
                         <RadioGroup
                             value={quality}
                             onValueChange={(value) => setQuality(value as GenerationFormData['quality'])}
@@ -206,7 +206,7 @@ export function GenerationForm({
                     </div>
 
                     <div className='space-y-3'>
-                        <Label className='block text-white'>Background</Label>
+                        <Label className='block text-neutral-100'>Background</Label>
                         <RadioGroup
                             value={background}
                             onValueChange={(value) => setBackground(value as GenerationFormData['background'])}
@@ -224,7 +224,7 @@ export function GenerationForm({
                     </div>
 
                     <div className='space-y-3'>
-                        <Label className='block text-white'>Output Format</Label>
+                        <Label className='block text-neutral-100'>Output Format</Label>
                         <RadioGroup
                             value={outputFormat}
                             onValueChange={(value) => setOutputFormat(value as GenerationFormData['output_format'])}
@@ -238,7 +238,7 @@ export function GenerationForm({
 
                     {showCompression && (
                         <div className='space-y-2 pt-2 transition-opacity duration-300'>
-                            <Label htmlFor='compression-slider' className='text-white'>
+                            <Label htmlFor='compression-slider' className='text-neutral-100'>
                                 Compression: {compression[0]}%
                             </Label>
                             <Slider
@@ -255,7 +255,7 @@ export function GenerationForm({
                     )}
 
                     <div className='space-y-3'>
-                        <Label className='block text-white'>Moderation Level</Label>
+                        <Label className='block text-neutral-100'>Moderation Level</Label>
                         <RadioGroup
                             value={moderation}
                             onValueChange={(value) => setModeration(value as GenerationFormData['moderation'])}
@@ -266,7 +266,7 @@ export function GenerationForm({
                         </RadioGroup>
                     </div>
                 </CardContent>
-                <CardFooter className='border-t border-white/10 p-4'>
+                <CardFooter className='border-t border-neutral-800 p-4'>
                     <Button
                         type='submit'
                         disabled={isLoading || !prompt}

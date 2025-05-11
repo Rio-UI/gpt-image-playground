@@ -10,7 +10,6 @@ import { db, type ImageRecord } from '@/lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import * as React from 'react';
 import { SettingsButton } from '@/components/SettingsButton';
-import { ThemeToggle } from '@/components/theme-toggle';
 
 type HistoryImage = {
     filename: string;
@@ -518,8 +517,7 @@ export default function HomePage() {
     return (
         <div className="container mx-auto p-4">
             <SettingsButton />
-            <ThemeToggle />
-            <main className='flex min-h-screen flex-col items-center bg-background p-4 text-foreground md:p-8 lg:p-12'>
+            <main className='flex min-h-screen flex-col items-center bg-neutral-950 p-4 text-neutral-100 md:p-8 lg:p-12'>
                 <div className='w-full max-w-7xl space-y-6'>
                     <div className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
                         <div className='relative flex h-[70vh] min-h-[600px] flex-col lg:col-span-1'>

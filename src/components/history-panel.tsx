@@ -70,295 +70,202 @@ export function HistoryPanel({ history, onSelectImage, onClearHistory, getImageS
     };
 
     return (
-        <Card className='flex h-full w-full flex-col overflow-hidden rounded-lg border border-white/10 bg-black'>
-            <CardHeader className='flex flex-row items-center justify-between gap-4 border-b border-white/10 px-4 py-3'>
+        <Card className='flex h-full w-full flex-col overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900'>
+            <CardHeader className='flex flex-row items-center justify-between gap-4 border-b border-neutral-800 px-4 py-3'>
                 <div className='flex items-center gap-2'>
-                    <CardTitle className='text-lg font-medium text-white'>History</CardTitle>
+                    <CardTitle className='text-lg font-medium text-neutral-100'>History</CardTitle>
                     {totalCost > 0 && (
                         <Dialog open={isTotalCostDialogOpen} onOpenChange={setIsTotalCostDialogOpen}>
                             <DialogTrigger asChild>
                                 <button
-                                    className='mt-0.5 flex items-center gap-1 rounded-full bg-green-600/80 px-1.5 py-0.5 text-[12px] text-white transition-colors hover:bg-green-500/90'
+                                    className='mt-0.5 flex items-center gap-1 rounded-full bg-emerald-600/80 px-1.5 py-0.5 text-[12px] text-neutral-100 transition-colors hover:bg-emerald-500/90'
                                     aria-label='Show total cost summary'>
                                     Total Cost: ${totalCost.toFixed(4)}
                                 </button>
                             </DialogTrigger>
-                            <DialogContent className='border-neutral-700 bg-neutral-900 text-white sm:max-w-[450px]'>
+                            <DialogContent className='border-neutral-700 bg-neutral-900 text-neutral-100 sm:max-w-[625px]'>
                                 <DialogHeader>
-                                    <DialogTitle className='text-white'>Total Cost Summary</DialogTitle>
-                                    {/* Add sr-only description for accessibility */}
+                                    <DialogTitle className='text-neutral-100'>Total Cost Summary</DialogTitle>
                                     <DialogDescription className='sr-only'>
-                                        A summary of the total estimated cost for all generated images in the history.
+                                        A summary of all costs incurred during image generation and editing.
                                     </DialogDescription>
                                 </DialogHeader>
-                                <div className='space-y-1 pt-1 text-xs text-neutral-400'>
-                                    <p>Pricing for gpt-image-1:</p>
-                                    <ul className='list-disc pl-4'>
-                                        <li>Text Input: $5 / 1M tokens</li>
-                                        <li>Image Input: $10 / 1M tokens</li>
-                                        <li>Image Output: $40 / 1M tokens</li>
-                                    </ul>
+                                <div className='max-h-[400px] overflow-y-auto rounded-md border border-neutral-700 bg-neutral-800 p-3 py-4 text-sm text-neutral-300'>
+                                    <div className='space-y-2'>
+                                        <div className='flex justify-between'>
+                                            <span>Total Images Generated:</span>{' '}
+                                            <span>{totalImages.toLocaleString()}</span>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <span>Total Text Input Tokens:</span>{' '}
+                                            <span>{totalTextInputTokens.toLocaleString()}</span>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <span>Total Text Output Tokens:</span>{' '}
+                                            <span>{totalTextOutputTokens.toLocaleString()}</span>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <span>Total Image Tokens:</span>{' '}
+                                            <span>{totalImageTokens.toLocaleString()}</span>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <span>Total Cost:</span>{' '}
+                                            <span>${totalCost.toFixed(4)}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className='space-y-2 py-4 text-sm text-neutral-300'>
-                                    <div className='flex justify-between'>
-                                        <span>Total Images Generated:</span> <span>{totalImages.toLocaleString()}</span>
-                                    </div>
-                                    <div className='flex justify-between'>
-                                        <span>Average Cost Per Image:</span> <span>${averageCost.toFixed(4)}</span>
-                                    </div>
-                                    <hr className='my-2 border-neutral-700' />
-                                    <div className='flex justify-between font-medium text-white'>
-                                        <span>Total Estimated Cost:</span>
-                                        <span>${totalCost.toFixed(4)}</span>
-                                    </div>
-                                </div>
-                                <DialogFooter>
-                                    <DialogClose asChild>
-                                        <Button
-                                            type='button'
-                                            variant='secondary'
-                                            size='sm'
-                                            className='bg-neutral-700 text-neutral-200 hover:bg-neutral-600'>
-                                            Close
-                                        </Button>
-                                    </DialogClose>
-                                </DialogFooter>
                             </DialogContent>
                         </Dialog>
                     )}
                 </div>
-                {history.length > 0 && (
-                    <Button
-                        variant='ghost'
-                        size='sm'
-                        onClick={onClearHistory}
-                        className='h-auto rounded-md px-2 py-1 text-white/60 hover:bg-white/10 hover:text-white'>
-                        Clear
-                    </Button>
-                )}
+                <Button
+                    variant='ghost'
+                    size='sm'
+                    onClick={onClearHistory}
+                    className='text-neutral-400 hover:text-neutral-100'>
+                    Clear History
+                </Button>
             </CardHeader>
-            <CardContent className='flex-grow overflow-y-auto p-4'>
+            <CardContent className='flex-1 overflow-y-auto p-0'>
                 {history.length === 0 ? (
-                    <div className='flex h-full items-center justify-center text-white/40'>
-                        <p>Generated images will appear here.</p>
+                    <div className='flex h-full items-center justify-center p-4 text-neutral-400'>
+                        No history yet. Generate or edit some images to see them here.
                     </div>
                 ) : (
-                    <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
-                        {[...history].map((item) => {
-                            const firstImage = item.images?.[0];
-                            const imageCount = item.images?.length ?? 0;
-                            const isMultiImage = imageCount > 1;
-                            const itemKey = item.timestamp;
-                            const thumbnailUrl = firstImage ? getImageSrc(firstImage.filename) : undefined;
-                            const storageModeUsed = item.storageModeUsed || 'fs';
-
-                            return (
-                                <div key={itemKey} className='flex flex-col'>
-                                    <div className='group relative'>
-                                        <button
-                                            onClick={() => onSelectImage(item)}
-                                            className='relative block aspect-square w-full overflow-hidden rounded-t-md border border-white/20 transition-all duration-150 group-hover:border-white/40 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black focus:outline-none'
-                                            aria-label={`View image batch from ${new Date(item.timestamp).toLocaleString()}`}>
-                                            {thumbnailUrl ? (
-                                                <Image
-                                                    src={thumbnailUrl}
-                                                    alt={`Preview for batch generated at ${new Date(item.timestamp).toLocaleString()}`}
-                                                    width={150}
-                                                    height={150}
-                                                    className='h-full w-full object-cover'
-                                                    unoptimized
-                                                />
-                                            ) : (
-                                                <div className='flex h-full w-full items-center justify-center bg-neutral-800 text-neutral-500'>
-                                                    ?
-                                                </div>
-                                            )}
-                                            <div
-                                                className={cn(
-                                                    'pointer-events-none absolute top-1 left-1 z-10 flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[11px] text-white',
-                                                    item.mode === 'edit' ? 'bg-orange-600/80' : 'bg-blue-600/80'
-                                                )}>
-                                                {item.mode === 'edit' ? (
-                                                    <Pencil size={12} />
-                                                ) : (
-                                                    <SparklesIcon size={12} />
-                                                )}
-                                                {item.mode === 'edit' ? 'Edit' : 'Create'}
-                                            </div>
-                                            {isMultiImage && (
-                                                <div className='pointer-events-none absolute right-1 bottom-1 z-10 flex items-center gap-1 rounded-full bg-black/70 px-1.5 py-0.5 text-[12px] text-white'>
-                                                    <Layers size={16} />
-                                                    {imageCount}
-                                                </div>
-                                            )}
-                                            <div className='pointer-events-none absolute bottom-1 left-1 z-10 flex items-center gap-1 rounded-full border border-white/10 bg-neutral-900/80 px-1 py-0.5 text-[11px] text-white/70'>
-                                                {storageModeUsed === 'fs' ? (
-                                                    <HardDrive size={12} className='text-neutral-400' />
-                                                ) : (
-                                                    <Database size={12} className='text-blue-400' />
-                                                )}
-                                                <span>{storageModeUsed === 'fs' ? 'file' : 'db'}</span>
-                                            </div>
-                                        </button>
-                                        {item.costDetails && (
-                                            <Dialog
-                                                open={openCostDialogTimestamp === itemKey}
-                                                onOpenChange={(isOpen) => !isOpen && setOpenCostDialogTimestamp(null)}>
-                                                <DialogTrigger asChild>
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            setOpenCostDialogTimestamp(itemKey);
-                                                        }}
-                                                        className='absolute top-1 right-1 z-20 flex items-center gap-0.5 rounded-full bg-green-600/80 px-1.5 py-0.5 text-[11px] text-white transition-colors hover:bg-green-500/90'
-                                                        aria-label='Show cost breakdown'>
-                                                        <DollarSign size={12} />
-                                                        {item.costDetails.estimated_cost_usd.toFixed(4)}
-                                                    </button>
-                                                </DialogTrigger>
-                                                <DialogContent className='border-neutral-700 bg-neutral-900 text-white sm:max-w-[450px]'>
-                                                    <DialogHeader>
-                                                        <DialogTitle className='text-white'>Cost Breakdown</DialogTitle>
-                                                        <DialogDescription className='sr-only'>
-                                                            Estimated cost breakdown for this image generation.
-                                                        </DialogDescription>
-                                                    </DialogHeader>
-                                                    <div className='space-y-1 pt-1 text-xs text-neutral-400'>
-                                                        <p>Pricing for gpt-image-1:</p>
-                                                        <ul className='list-disc pl-4'>
-                                                            <li>Text Input: $5 / 1M tokens</li>
-                                                            <li>Image Input: $10 / 1M tokens</li>
-                                                            <li>Image Output: $40 / 1M tokens</li>
-                                                        </ul>
-                                                    </div>
-                                                    <div className='space-y-2 py-4 text-sm text-neutral-300'>
-                                                        <div className='flex justify-between'>
-                                                            <span>Text Input Tokens:</span>{' '}
-                                                            <span>
-                                                                {item.costDetails.text_input_tokens.toLocaleString()}{' '}
-                                                                (~$
-                                                                {calculateCost(
-                                                                    item.costDetails.text_input_tokens,
-                                                                    0.000005
-                                                                )}
-                                                                )
-                                                            </span>
-                                                        </div>
-                                                        {item.costDetails.image_input_tokens > 0 && (
-                                                            <div className='flex justify-between'>
-                                                                <span>Image Input Tokens:</span>{' '}
-                                                                <span>
-                                                                    {item.costDetails.image_input_tokens.toLocaleString()}{' '}
-                                                                    (~$
-                                                                    {calculateCost(
-                                                                        item.costDetails.image_input_tokens,
-                                                                        0.00001
-                                                                    )}
-                                                                    )
-                                                                </span>
+                    <div className='divide-y divide-neutral-800'>
+                        {history.map((item, index) => (
+                            <div
+                                key={item.timestamp}
+                                className='group relative flex cursor-pointer flex-col gap-2 p-4 transition-colors hover:bg-neutral-800/50'>
+                                <div className='flex items-start justify-between gap-4'>
+                                    <div className='flex-1 space-y-1'>
+                                        <div className='flex items-center gap-2'>
+                                            <span className='text-sm font-medium text-neutral-100'>
+                                                {item.mode === 'generate' ? 'Generated' : 'Edited'} Image
+                                                {item.images.length > 1 ? 's' : ''}
+                                            </span>
+                                            {item.costDetails && (
+                                                <Dialog open={isCostDialogOpen === index} onOpenChange={(open) => setIsCostDialogOpen(open ? index : null)}>
+                                                    <DialogTrigger asChild>
+                                                        <button
+                                                            className='mt-0.5 flex items-center gap-1 rounded-full bg-emerald-600/80 px-1.5 py-0.5 text-[12px] text-neutral-100 transition-colors hover:bg-emerald-500/90'
+                                                            aria-label='Show cost details'>
+                                                            Cost: ${calculateTotalCost(item.costDetails).toFixed(4)}
+                                                        </button>
+                                                    </DialogTrigger>
+                                                    <DialogContent className='border-neutral-700 bg-neutral-900 text-neutral-100 sm:max-w-[625px]'>
+                                                        <DialogHeader>
+                                                            <DialogTitle className='text-neutral-100'>Cost Details</DialogTitle>
+                                                            <DialogDescription className='sr-only'>
+                                                                Detailed breakdown of costs for this image generation or edit.
+                                                            </DialogDescription>
+                                                        </DialogHeader>
+                                                        <div className='max-h-[400px] overflow-y-auto rounded-md border border-neutral-700 bg-neutral-800 p-3 py-4 text-sm text-neutral-300'>
+                                                            <div className='space-y-2'>
+                                                                <div className='flex justify-between'>
+                                                                    <span>Text Input Tokens:</span>{' '}
+                                                                    <span>
+                                                                        {item.costDetails.text_input_tokens.toLocaleString()}{' '}
+                                                                        (~$
+                                                                        {calculateCost(
+                                                                            item.costDetails.text_input_tokens,
+                                                                            0.000005
+                                                                        )}
+                                                                        )
+                                                                    </span>
+                                                                </div>
+                                                                <div className='flex justify-between'>
+                                                                    <span>Text Output Tokens:</span>{' '}
+                                                                    <span>
+                                                                        {item.costDetails.text_output_tokens.toLocaleString()}{' '}
+                                                                        (~$
+                                                                        {calculateCost(
+                                                                            item.costDetails.text_output_tokens,
+                                                                            0.000015
+                                                                        )}
+                                                                        )
+                                                                    </span>
+                                                                </div>
+                                                                <div className='flex justify-between'>
+                                                                    <span>Image Tokens:</span>{' '}
+                                                                    <span>
+                                                                        {item.costDetails.image_tokens.toLocaleString()}{' '}
+                                                                        (~$
+                                                                        {calculateCost(
+                                                                            item.costDetails.image_tokens,
+                                                                            0.00001
+                                                                        )}
+                                                                        )
+                                                                    </span>
+                                                                </div>
+                                                                <div className='flex justify-between'>
+                                                                    <span>Total Cost:</span>{' '}
+                                                                    <span>
+                                                                        $
+                                                                        {calculateTotalCost(item.costDetails).toFixed(4)}
+                                                                    </span>
+                                                                </div>
                                                             </div>
-                                                        )}
-                                                        <div className='flex justify-between'>
-                                                            <span>Image Output Tokens:</span>{' '}
-                                                            <span>
-                                                                {item.costDetails.image_output_tokens.toLocaleString()}{' '}
-                                                                (~$
-                                                                {calculateCost(
-                                                                    item.costDetails.image_output_tokens,
-                                                                    0.00004
-                                                                )}
-                                                                )
-                                                            </span>
                                                         </div>
-                                                        <hr className='my-2 border-neutral-700' />
-                                                        <div className='flex justify-between font-medium text-white'>
-                                                            <span>Total Estimated Cost:</span>
-                                                            <span>
-                                                                ${item.costDetails.estimated_cost_usd.toFixed(4)}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <DialogFooter>
-                                                        <DialogClose asChild>
-                                                            <Button
-                                                                type='button'
-                                                                variant='secondary'
-                                                                size='sm'
-                                                                className='bg-neutral-700 text-neutral-200 hover:bg-neutral-600'>
-                                                                Close
-                                                            </Button>
-                                                        </DialogClose>
-                                                    </DialogFooter>
-                                                </DialogContent>
-                                            </Dialog>
-                                        )}
+                                                    </DialogContent>
+                                                </Dialog>
+                                            )}
+                                        </div>
+                                        <div className='space-y-1 rounded-b-md border border-t-0 border-neutral-700 bg-neutral-800 p-2 text-xs text-neutral-400'>
+                                            <p title={`Generated on: ${new Date(item.timestamp).toLocaleString()}`}>
+                                                <span className='font-medium text-neutral-300'>Time:</span>{' '}
+                                                {formatDuration(item.durationMs)}
+                                            </p>
+                                            <p>
+                                                <span className='font-medium text-neutral-300'>Quality:</span> {item.quality}
+                                            </p>
+                                            <p>
+                                                <span className='font-medium text-neutral-300'>BG:</span> {item.background}
+                                            </p>
+                                            <p>
+                                                <span className='font-medium text-neutral-300'>Mod:</span> {item.moderation}
+                                            </p>
+                                        </div>
                                     </div>
-
-                                    <div className='space-y-1 rounded-b-md border border-t-0 border-neutral-700 bg-black p-2 text-xs text-white/60'>
-                                        <p title={`Generated on: ${new Date(item.timestamp).toLocaleString()}`}>
-                                            <span className='font-medium text-white/80'>Time:</span>{' '}
-                                            {formatDuration(item.durationMs)}
-                                        </p>
-                                        <p>
-                                            <span className='font-medium text-white/80'>Quality:</span> {item.quality}
-                                        </p>
-                                        <p>
-                                            <span className='font-medium text-white/80'>BG:</span> {item.background}
-                                        </p>
-                                        <p>
-                                            <span className='font-medium text-white/80'>Mod:</span> {item.moderation}
-                                        </p>
-                                        <Dialog
-                                            open={openPromptDialogTimestamp === itemKey}
-                                            onOpenChange={(isOpen) => !isOpen && setOpenPromptDialogTimestamp(null)}>
-                                            <DialogTrigger asChild>
-                                                <Button
-                                                    variant='outline'
-                                                    size='sm'
-                                                    className='mt-1 h-6 w-full border-white/20 px-2 py-1 text-xs text-white/70 hover:bg-white/10 hover:text-white'
-                                                    onClick={() => setOpenPromptDialogTimestamp(itemKey)}>
-                                                    Show Prompt
-                                                </Button>
-                                            </DialogTrigger>
-                                            <DialogContent className='border-neutral-700 bg-neutral-900 text-white sm:max-w-[625px]'>
-                                                <DialogHeader>
-                                                    <DialogTitle className='text-white'>Prompt</DialogTitle>
-                                                    <DialogDescription className='sr-only'>
-                                                        The full prompt used to generate this image batch.
-                                                    </DialogDescription>
-                                                </DialogHeader>
-                                                <div className='max-h-[400px] overflow-y-auto rounded-md border border-neutral-600 bg-neutral-800 p-3 py-4 text-sm text-neutral-300'>
-                                                    {item.prompt || 'No prompt recorded.'}
-                                                </div>
-                                                <DialogFooter>
-                                                    <Button
-                                                        variant='outline'
-                                                        size='sm'
-                                                        onClick={() => handleCopy(item.prompt, itemKey)}
-                                                        className='border-neutral-600 text-neutral-300 hover:bg-neutral-700 hover:text-white'>
-                                                        {copiedTimestamp === itemKey ? (
-                                                            <Check className='mr-2 h-4 w-4 text-green-400' />
-                                                        ) : (
-                                                            <Copy className='mr-2 h-4 w-4' />
-                                                        )}
-                                                        {copiedTimestamp === itemKey ? 'Copied!' : 'Copy'}
-                                                    </Button>
-                                                    <DialogClose asChild>
-                                                        <Button
-                                                            type='button'
-                                                            variant='secondary'
-                                                            size='sm'
-                                                            className='bg-neutral-700 text-neutral-200 hover:bg-neutral-600'>
-                                                            Close
-                                                        </Button>
-                                                    </DialogClose>
-                                                </DialogFooter>
-                                            </DialogContent>
-                                        </Dialog>
-                                    </div>
+                                    <Dialog open={isPromptDialogOpen === index} onOpenChange={(open) => setIsPromptDialogOpen(open ? index : null)}>
+                                        <DialogTrigger asChild>
+                                            <Button
+                                                variant='ghost'
+                                                size='sm'
+                                                className='text-neutral-400 hover:text-neutral-100'>
+                                                View Prompt
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent className='border-neutral-700 bg-neutral-900 text-neutral-100 sm:max-w-[625px]'>
+                                            <DialogHeader>
+                                                <DialogTitle className='text-neutral-100'>Prompt</DialogTitle>
+                                                <DialogDescription className='sr-only'>
+                                                    The full prompt used to generate this image batch.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <div className='max-h-[400px] overflow-y-auto rounded-md border border-neutral-700 bg-neutral-800 p-3 py-4 text-sm text-neutral-300'>
+                                                {item.prompt || 'No prompt recorded.'}
+                                            </div>
+                                        </DialogContent>
+                                    </Dialog>
                                 </div>
-                            );
-                        })}
+                                <div className='grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
+                                    {item.images.map((img) => (
+                                        <div
+                                            key={img.filename}
+                                            className='group relative aspect-square overflow-hidden rounded-md border border-neutral-700 bg-neutral-800'>
+                                            <Image
+                                                src={getImageSrc(img.filename) || ''}
+                                                alt={`Generated image ${img.filename}`}
+                                                fill
+                                                className='object-cover transition-transform group-hover:scale-105'
+                                                onClick={() => onSelectImage(item)}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 )}
             </CardContent>
