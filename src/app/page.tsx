@@ -10,6 +10,7 @@ import { db, type ImageRecord } from '@/lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import * as React from 'react';
 import { SettingsButton } from '@/components/SettingsButton';
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 type HistoryImage = {
     filename: string;
@@ -517,10 +518,11 @@ export default function HomePage() {
     return (
         <div className="container mx-auto p-4">
             <SettingsButton />
-            <main className='flex min-h-screen flex-col items-center bg-black p-4 text-white md:p-8 lg:p-12'>
-                <div className='w-full max-w-7xl space-y-6'>
-                    <div className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
-                        <div className='relative flex h-[70vh] min-h-[600px] flex-col lg:col-span-1'>
+            <ThemeToggle />
+            <main className="flex min-h-screen flex-col items-center bg-background p-4 text-foreground md:p-8 lg:p-12">
+                <div className="w-full max-w-7xl space-y-6">
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                        <div className="relative flex h-[70vh] min-h-[600px] flex-col lg:col-span-1">
                             <div className={mode === 'generate' ? 'block h-full w-full' : 'hidden'}>
                                 <GenerationForm
                                     onSubmit={handleApiCall}
@@ -581,10 +583,10 @@ export default function HomePage() {
                                 />
                             </div>
                         </div>
-                        <div className='flex h-[70vh] min-h-[600px] flex-col lg:col-span-1'>
+                        <div className="flex h-[70vh] min-h-[600px] flex-col lg:col-span-1">
                             {error && (
-                                <Alert variant='destructive' className='mb-4 border-red-500/50 bg-red-900/20 text-red-300'>
-                                    <AlertTitle className='text-red-200'>Error</AlertTitle>
+                                <Alert variant="destructive" className="mb-4">
+                                    <AlertTitle>错误</AlertTitle>
                                     <AlertDescription>{error}</AlertDescription>
                                 </Alert>
                             )}
@@ -601,7 +603,7 @@ export default function HomePage() {
                         </div>
                     </div>
 
-                    <div className='min-h-[450px]'>
+                    <div className="min-h-[450px]">
                         <HistoryPanel
                             history={history}
                             onSelectImage={handleHistorySelect}
