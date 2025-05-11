@@ -91,10 +91,10 @@ const RadioItemWithIcon = ({
         <RadioGroupItem
             value={value}
             id={id}
-            className='border-neutral-600 text-neutral-100 data-[state=checked]:border-neutral-200 data-[state=checked]:text-neutral-100'
+            className='border-white/40 text-white data-[state=checked]:border-white data-[state=checked]:text-white'
         />
-        <Label htmlFor={id} className='flex cursor-pointer items-center gap-2 text-base text-neutral-300'>
-            <Icon className='h-5 w-5 text-neutral-400' />
+        <Label htmlFor={id} className='flex cursor-pointer items-center gap-2 text-base text-white/80'>
+            <Icon className='h-5 w-5 text-white/60' />
             {label}
         </Label>
     </div>
@@ -443,40 +443,38 @@ export function EditingForm({
     };
 
     return (
-        <Card className='flex h-full w-full flex-col overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900'>
-            <CardHeader className='flex items-start justify-between border-b border-neutral-800 pb-4'>
+        <Card className='flex h-full w-full flex-col overflow-hidden rounded-lg border border-white/10 bg-black'>
+            <CardHeader className='flex items-start justify-between border-b border-white/10 pb-4'>
                 <div>
-                    <CardTitle className='text-lg font-medium text-neutral-100'>Edit Image</CardTitle>
-                    <CardDescription className='mt-1 text-neutral-400'>
-                        Edit an existing image using gpt-image-1.
-                    </CardDescription>
+                    <CardTitle className='text-lg font-medium text-white'>Edit Image</CardTitle>
+                    <CardDescription className='mt-1 text-white/60'>Modify an image using gpt-image-1.</CardDescription>
                 </div>
                 <ModeToggle currentMode={currentMode} onModeChange={onModeChange} />
             </CardHeader>
             <form onSubmit={handleSubmit} className='flex h-full flex-1 flex-col overflow-hidden'>
                 <CardContent className='flex-1 space-y-5 overflow-y-auto p-4'>
                     <div className='space-y-1.5'>
-                        <Label htmlFor='prompt' className='text-neutral-100'>
+                        <Label htmlFor='edit-prompt' className='text-white'>
                             Prompt
                         </Label>
                         <Textarea
-                            id='prompt'
-                            placeholder='e.g., Make the cat astronaut wear a red space suit'
+                            id='edit-prompt'
+                            placeholder='e.g., Add a party hat to the main subject'
                             value={editPrompt}
                             onChange={(e) => setEditPrompt(e.target.value)}
                             required
                             disabled={isLoading}
-                            className='min-h-[80px] rounded-md border border-neutral-700 bg-neutral-800 text-neutral-100 placeholder:text-neutral-500 focus:border-neutral-600 focus:ring-neutral-600'
+                            className='min-h-[80px] rounded-md border border-white/20 bg-black text-white placeholder:text-white/40 focus:border-white/50 focus:ring-white/50'
                         />
                     </div>
 
                     <div className='space-y-2'>
-                        <Label className='text-neutral-100'>Source Image(s) [Max: 10]</Label>
+                        <Label className='text-white'>Source Image(s) [Max: 10]</Label>
                         <Label
                             htmlFor='image-files-input'
-                            className='flex h-10 w-full cursor-pointer items-center justify-between rounded-md border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm transition-colors hover:bg-neutral-700'>
-                            <span className='truncate pr-2 text-neutral-400'>{displayFileNames(imageFiles)}</span>
-                            <span className='flex shrink-0 items-center gap-1.5 rounded-md bg-neutral-700 px-3 py-1 text-xs font-medium text-neutral-400 hover:bg-neutral-600'>
+                            className='flex h-10 w-full cursor-pointer items-center justify-between rounded-md border border-white/20 bg-black px-3 py-2 text-sm transition-colors hover:bg-white/5'>
+                            <span className='truncate pr-2 text-white/60'>{displayFileNames(imageFiles)}</span>
+                            <span className='flex shrink-0 items-center gap-1.5 rounded-md bg-white/10 px-3 py-1 text-xs font-medium text-white/80 hover:bg-white/20'>
                                 <Upload className='h-3 w-3' /> Browse...
                             </span>
                         </Label>
@@ -498,14 +496,14 @@ export function EditingForm({
                                             alt={`Source preview ${index + 1}`}
                                             width={80}
                                             height={80}
-                                            className='rounded border border-neutral-700 object-cover'
+                                            className='rounded border border-white/10 object-cover'
                                             unoptimized
                                         />
                                         <Button
                                             type='button'
                                             variant='destructive'
                                             size='icon'
-                                            className='absolute top-0 right-0 h-5 w-5 translate-x-1/3 -translate-y-1/3 transform rounded-full bg-red-600 p-0.5 text-neutral-100 hover:bg-red-700'
+                                            className='absolute top-0 right-0 h-5 w-5 translate-x-1/3 -translate-y-1/3 transform rounded-full bg-red-600 p-0.5 text-white hover:bg-red-700'
                                             onClick={() => handleRemoveImage(index)}
                                             aria-label={`Remove image ${index + 1}`}>
                                             <X className='h-3 w-3' />
@@ -517,14 +515,14 @@ export function EditingForm({
                     </div>
 
                     <div className='space-y-3'>
-                        <Label className='block text-neutral-100'>Mask</Label>
+                        <Label className='block text-white'>Mask</Label>
                         <Button
                             type='button'
                             variant='outline'
                             size='sm'
                             onClick={() => setEditShowMaskEditor(!editShowMaskEditor)}
                             disabled={isLoading || !editOriginalImageSize}
-                            className='w-full justify-start border-neutral-700 px-3 text-neutral-400 hover:bg-neutral-700 hover:text-neutral-100'>
+                            className='w-full justify-start border-white/20 px-3 text-white/80 hover:bg-white/10 hover:text-white'>
                             {editShowMaskEditor
                                 ? 'Close Mask Editor'
                                 : editGeneratedMaskFile
@@ -537,13 +535,13 @@ export function EditingForm({
                         </Button>
 
                         {editShowMaskEditor && firstImagePreviewUrl && editOriginalImageSize && (
-                            <div className='space-y-3 rounded-md border border-neutral-700 bg-neutral-800 p-3'>
-                                <p className='text-xs text-neutral-400'>
+                            <div className='space-y-3 rounded-md border border-white/20 bg-black p-3'>
+                                <p className='text-xs text-white/60'>
                                     Draw on the image below to mark areas for editing (drawn areas become transparent in
                                     the mask).
                                 </p>
                                 <div
-                                    className='relative mx-auto w-full overflow-hidden rounded border border-neutral-700'
+                                    className='relative mx-auto w-full overflow-hidden rounded border border-white/10'
                                     style={{
                                         maxWidth: `min(100%, ${editOriginalImageSize.width}px)`,
                                         aspectRatio: `${editOriginalImageSize.width} / ${editOriginalImageSize.height}`
@@ -572,7 +570,7 @@ export function EditingForm({
                                 </div>
                                 <div className='grid grid-cols-1 gap-4 pt-2'>
                                     <div className='space-y-2'>
-                                        <Label htmlFor='brush-size-slider' className='text-sm text-neutral-400'>
+                                        <Label htmlFor='brush-size-slider' className='text-sm text-white'>
                                             Brush Size: {editBrushSize[0]}px
                                         </Label>
                                         <Slider
@@ -594,7 +592,7 @@ export function EditingForm({
                                         size='sm'
                                         onClick={() => maskInputRef.current?.click()}
                                         disabled={isLoading || !editOriginalImageSize}
-                                        className='mr-auto border-neutral-700 text-neutral-400 hover:bg-neutral-700 hover:text-neutral-100'>
+                                        className='mr-auto border-white/20 text-white/80 hover:bg-white/10 hover:text-white'>
                                         <UploadCloud className='mr-1.5 h-4 w-4' /> Upload Mask
                                     </Button>
                                     <Input
@@ -612,7 +610,7 @@ export function EditingForm({
                                             size='sm'
                                             onClick={handleClearMask}
                                             disabled={isLoading}
-                                            className='border-neutral-700 text-neutral-400 hover:bg-neutral-700 hover:text-neutral-100'>
+                                            className='border-white/20 text-white/80 hover:bg-white/10 hover:text-white'>
                                             <Eraser className='mr-1.5 h-4 w-4' /> Clear
                                         </Button>
                                         <Button
@@ -621,14 +619,14 @@ export function EditingForm({
                                             size='sm'
                                             onClick={generateAndSaveMask}
                                             disabled={isLoading || editDrawnPoints.length === 0}
-                                            className='bg-neutral-100 text-black hover:bg-neutral-200 disabled:opacity-50'>
+                                            className='bg-white text-black hover:bg-white/90 disabled:opacity-50'>
                                             <Save className='mr-1.5 h-4 w-4' /> Save Mask
                                         </Button>
                                     </div>
                                 </div>
                                 {editMaskPreviewUrl && (
-                                    <div className='mt-3 border-t border-neutral-700 pt-3 text-center'>
-                                        <Label className='mb-1.5 block text-sm text-neutral-400'>
+                                    <div className='mt-3 border-t border-white/10 pt-3 text-center'>
+                                        <Label className='mb-1.5 block text-sm text-white'>
                                             Generated Mask Preview:
                                         </Label>
                                         <div className='inline-block rounded border border-gray-300 bg-white p-1'>
@@ -660,7 +658,7 @@ export function EditingForm({
                     </div>
 
                     <div className='space-y-3'>
-                        <Label className='block text-neutral-100'>Size</Label>
+                        <Label className='block text-white'>Size</Label>
                         <RadioGroup
                             value={editSize}
                             onValueChange={(value) => setEditSize(value as EditingFormData['size'])}
@@ -684,7 +682,7 @@ export function EditingForm({
                     </div>
 
                     <div className='space-y-3'>
-                        <Label className='block text-neutral-100'>Quality</Label>
+                        <Label className='block text-white'>Quality</Label>
                         <RadioGroup
                             value={editQuality}
                             onValueChange={(value) => setEditQuality(value as EditingFormData['quality'])}
@@ -698,7 +696,7 @@ export function EditingForm({
                     </div>
 
                     <div className='space-y-2'>
-                        <Label htmlFor='edit-n-slider' className='text-neutral-100'>
+                        <Label htmlFor='edit-n-slider' className='text-white'>
                             Number of Images: {editN[0]}
                         </Label>
                         <Slider
@@ -713,11 +711,11 @@ export function EditingForm({
                         />
                     </div>
                 </CardContent>
-                <CardFooter className='border-t border-neutral-800 p-4'>
+                <CardFooter className='border-t border-white/10 p-4'>
                     <Button
                         type='submit'
                         disabled={isLoading || !editPrompt || imageFiles.length === 0}
-                        className='flex w-full items-center justify-center gap-2 rounded-md bg-neutral-100 text-black hover:bg-neutral-200 disabled:bg-neutral-200 disabled:text-neutral-400'>
+                        className='flex w-full items-center justify-center gap-2 rounded-md bg-white text-black hover:bg-white/90 disabled:bg-white/10 disabled:text-white/40'>
                         {isLoading && <Loader2 className='h-4 w-4 animate-spin' />}
                         {isLoading ? 'Editing...' : 'Edit Image'}
                     </Button>
