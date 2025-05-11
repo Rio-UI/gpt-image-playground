@@ -18,8 +18,8 @@ export function ModeToggle({ currentMode, onModeChange }: ModeToggleProps) {
                     value='generate'
                     className={`rounded-md border px-3 py-1 text-sm transition-colors ${
                         currentMode === 'generate'
-                            ? 'border-white bg-white text-black'
-                            : 'border-dashed border-white/30 bg-transparent text-white/60 hover:border-white/50 hover:text-white/80'
+                            ? 'border-primary bg-primary text-primary-foreground'
+                            : 'border-muted bg-transparent text-muted-foreground hover:border-primary/50 hover:text-foreground'
                     } `}>
                     Generate
                 </TabsTrigger>
@@ -27,8 +27,8 @@ export function ModeToggle({ currentMode, onModeChange }: ModeToggleProps) {
                     value='edit'
                     className={`rounded-md border px-3 py-1 text-sm transition-colors ${
                         currentMode === 'edit'
-                            ? 'border-white bg-white text-black'
-                            : 'border-dashed border-white/30 bg-transparent text-white/60 hover:border-white/50 hover:text-white/80'
+                            ? 'border-primary bg-primary text-primary-foreground'
+                            : 'border-muted bg-transparent text-muted-foreground hover:border-primary/50 hover:text-foreground'
                     } `}>
                     Edit
                 </TabsTrigger>

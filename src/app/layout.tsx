@@ -23,17 +23,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
     children
-}: {
+}: Readonly<{
     children: React.ReactNode;
-}) {
+}>) {
     return (
-        <html lang="zh-CN" suppressHydrationWarning>
+        <html lang='en' suppressHydrationWarning>
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="light"
-                    enableSystem={false}
-                >
+                <ThemeProvider attribute='class' defaultTheme='light' enableSystem={false} disableTransitionOnChange>
                     {children}
                 </ThemeProvider>
             </body>
