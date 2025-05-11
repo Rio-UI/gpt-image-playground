@@ -124,11 +124,11 @@ export function GenerationForm({
     };
 
     return (
-        <Card className='flex h-full w-full flex-col overflow-hidden rounded-lg border border-white/10 bg-gradient-to-b from-gray-900/50 to-black/50 backdrop-blur-sm'>
+        <Card className='flex h-full w-full flex-col overflow-hidden rounded-lg border border-white/10 bg-black'>
             <CardHeader className='flex items-start justify-between border-b border-white/10 pb-4'>
                 <div>
                     <CardTitle className='text-lg font-medium text-white'>Generate Image</CardTitle>
-                    <CardDescription className='mt-1 text-white/70'>
+                    <CardDescription className='mt-1 text-white/60'>
                         Create a new image from a text prompt using gpt-image-1.
                     </CardDescription>
                 </div>
@@ -137,7 +137,7 @@ export function GenerationForm({
             <form onSubmit={handleSubmit} className='flex h-full flex-1 flex-col overflow-hidden'>
                 <CardContent className='flex-1 space-y-5 overflow-y-auto p-4'>
                     <div className='space-y-1.5'>
-                        <Label htmlFor='prompt' className='text-white/90'>
+                        <Label htmlFor='prompt' className='text-white'>
                             Prompt
                         </Label>
                         <Textarea
@@ -147,7 +147,7 @@ export function GenerationForm({
                             onChange={(e) => setPrompt(e.target.value)}
                             required
                             disabled={isLoading}
-                            className='min-h-[80px] rounded-md border border-white/20 bg-black/30 text-white placeholder:text-white/40 focus:border-white/50 focus:ring-white/50'
+                            className='min-h-[80px] rounded-md border border-white/20 bg-black text-white placeholder:text-white/40 focus:border-white/50 focus:ring-white/50'
                         />
                     </div>
 

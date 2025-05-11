@@ -70,7 +70,7 @@ export function HistoryPanel({ history, onSelectImage, onClearHistory, getImageS
     };
 
     return (
-        <Card className='flex h-full w-full flex-col overflow-hidden rounded-lg border border-white/10 bg-gradient-to-b from-gray-900/50 to-black/50 backdrop-blur-sm'>
+        <Card className='flex h-full w-full flex-col overflow-hidden rounded-lg border border-white/10 bg-black'>
             <CardHeader className='flex flex-row items-center justify-between gap-4 border-b border-white/10 px-4 py-3'>
                 <div className='flex items-center gap-2'>
                     <CardTitle className='text-lg font-medium text-white'>History</CardTitle>
@@ -78,7 +78,7 @@ export function HistoryPanel({ history, onSelectImage, onClearHistory, getImageS
                         <Dialog open={isTotalCostDialogOpen} onOpenChange={setIsTotalCostDialogOpen}>
                             <DialogTrigger asChild>
                                 <button
-                                    className='mt-0.5 flex items-center gap-1 rounded-full bg-emerald-600/80 px-1.5 py-0.5 text-[12px] text-white transition-colors hover:bg-emerald-500/90'
+                                    className='mt-0.5 flex items-center gap-1 rounded-full bg-green-600/80 px-1.5 py-0.5 text-[12px] text-white transition-colors hover:bg-green-500/90'
                                     aria-label='Show total cost summary'>
                                     Total Cost: ${totalCost.toFixed(4)}
                                 </button>
@@ -294,19 +294,19 @@ export function HistoryPanel({ history, onSelectImage, onClearHistory, getImageS
                                         )}
                                     </div>
 
-                                    <div className='space-y-1 rounded-b-md border border-t-0 border-neutral-700/50 bg-black/30 p-2 text-xs text-white/70'>
+                                    <div className='space-y-1 rounded-b-md border border-t-0 border-neutral-700 bg-black p-2 text-xs text-white/60'>
                                         <p title={`Generated on: ${new Date(item.timestamp).toLocaleString()}`}>
-                                            <span className='font-medium text-white/90'>Time:</span>{' '}
+                                            <span className='font-medium text-white/80'>Time:</span>{' '}
                                             {formatDuration(item.durationMs)}
                                         </p>
                                         <p>
-                                            <span className='font-medium text-white/90'>Quality:</span> {item.quality}
+                                            <span className='font-medium text-white/80'>Quality:</span> {item.quality}
                                         </p>
                                         <p>
-                                            <span className='font-medium text-white/90'>BG:</span> {item.background}
+                                            <span className='font-medium text-white/80'>BG:</span> {item.background}
                                         </p>
                                         <p>
-                                            <span className='font-medium text-white/90'>Mod:</span> {item.moderation}
+                                            <span className='font-medium text-white/80'>Mod:</span> {item.moderation}
                                         </p>
                                         <Dialog
                                             open={openPromptDialogTimestamp === itemKey}
