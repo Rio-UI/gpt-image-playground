@@ -3,11 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import path from 'path';
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-    baseURL: process.env.OPENAI_API_BASE_URL
-});
-
 const outputDir = path.resolve(process.cwd(), 'generated-images');
 
 async function ensureOutputDirExists() {
@@ -34,12 +29,19 @@ async function ensureOutputDirExists() {
 export async function POST(request: NextRequest) {
     console.log('Received POST request to /api/images');
 
-    if (!process.env.OPENAI_API_KEY) {
-        console.error('OPENAI_API_KEY is not set.');
-        return NextResponse.json({ error: 'Server configuration error: API key not found.' }, { status: 500 });
-    }
-
     try {
+        const formData = await request.formData();
+        const apiKey = formData.get('api_key') as string | null;
+
+        if (!apiKey) {
+            return NextResponse.json({ error: 'API Key is required' }, { status: 400 });
+        }
+
+        const openai = new OpenAI({
+            apiKey,
+            baseURL: process.env.OPENAI_API_BASE_URL
+        });
+
         let effectiveStorageMode: 'fs' | 'indexeddb';
         const explicitMode = process.env.NEXT_PUBLIC_IMAGE_STORAGE_MODE;
         const isOnVercel = process.env.VERCEL === '1';
@@ -61,7 +63,6 @@ export async function POST(request: NextRequest) {
             await ensureOutputDirExists();
         }
 
-        const formData = await request.formData();
         const mode = formData.get('mode') as 'generate' | 'edit' | null;
         const prompt = formData.get('prompt') as string | null;
 

@@ -9,6 +9,7 @@ import { calculateApiCost, type CostDetails } from '@/lib/cost-utils';
 import { db, type ImageRecord } from '@/lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import * as React from 'react';
+import { SettingsButton } from '@/components/SettingsButton';
 
 type HistoryImage = {
     filename: string;
@@ -224,8 +225,16 @@ export default function HomePage() {
         setLatestImageBatch(null);
         setImageOutputView('grid');
 
+        const apiKey = localStorage.getItem('OPENAI_API_KEY');
+        if (!apiKey) {
+            setError('请先在设置中配置 OpenAI API Key');
+            setIsLoading(false);
+            return;
+        }
+
         const apiFormData = new FormData();
         apiFormData.append('mode', mode);
+        apiFormData.append('api_key', apiKey);
 
         if (mode === 'generate') {
             const genData = formData as GenerationFormData;
@@ -506,99 +515,102 @@ export default function HomePage() {
     };
 
     return (
-        <main className='flex min-h-screen flex-col items-center bg-black p-4 text-white md:p-8 lg:p-12'>
-            <div className='w-full max-w-7xl space-y-6'>
-                <div className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
-                    <div className='relative flex h-[70vh] min-h-[600px] flex-col lg:col-span-1'>
-                        <div className={mode === 'generate' ? 'block h-full w-full' : 'hidden'}>
-                            <GenerationForm
-                                onSubmit={handleApiCall}
-                                isLoading={isLoading}
-                                currentMode={mode}
-                                onModeChange={setMode}
-                                prompt={genPrompt}
-                                setPrompt={setGenPrompt}
-                                n={genN}
-                                setN={setGenN}
-                                size={genSize}
-                                setSize={setGenSize}
-                                quality={genQuality}
-                                setQuality={setGenQuality}
-                                outputFormat={genOutputFormat}
-                                setOutputFormat={setGenOutputFormat}
-                                compression={genCompression}
-                                setCompression={setGenCompression}
-                                background={genBackground}
-                                setBackground={setGenBackground}
-                                moderation={genModeration}
-                                setModeration={setGenModeration}
-                            />
+        <div className="container mx-auto p-4">
+            <SettingsButton />
+            <main className='flex min-h-screen flex-col items-center bg-black p-4 text-white md:p-8 lg:p-12'>
+                <div className='w-full max-w-7xl space-y-6'>
+                    <div className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
+                        <div className='relative flex h-[70vh] min-h-[600px] flex-col lg:col-span-1'>
+                            <div className={mode === 'generate' ? 'block h-full w-full' : 'hidden'}>
+                                <GenerationForm
+                                    onSubmit={handleApiCall}
+                                    isLoading={isLoading}
+                                    currentMode={mode}
+                                    onModeChange={setMode}
+                                    prompt={genPrompt}
+                                    setPrompt={setGenPrompt}
+                                    n={genN}
+                                    setN={setGenN}
+                                    size={genSize}
+                                    setSize={setGenSize}
+                                    quality={genQuality}
+                                    setQuality={setGenQuality}
+                                    outputFormat={genOutputFormat}
+                                    setOutputFormat={setGenOutputFormat}
+                                    compression={genCompression}
+                                    setCompression={setGenCompression}
+                                    background={genBackground}
+                                    setBackground={setGenBackground}
+                                    moderation={genModeration}
+                                    setModeration={setGenModeration}
+                                />
+                            </div>
+                            <div className={mode === 'edit' ? 'block h-full w-full' : 'hidden'}>
+                                <EditingForm
+                                    onSubmit={handleApiCall}
+                                    isLoading={isLoading || isSendingToEdit}
+                                    currentMode={mode}
+                                    onModeChange={setMode}
+                                    imageFiles={editImageFiles}
+                                    sourceImagePreviewUrls={editSourceImagePreviewUrls}
+                                    setImageFiles={setEditImageFiles}
+                                    setSourceImagePreviewUrls={setEditSourceImagePreviewUrls}
+                                    maxImages={MAX_EDIT_IMAGES}
+                                    editPrompt={editPrompt}
+                                    setEditPrompt={setEditPrompt}
+                                    editN={editN}
+                                    setEditN={setEditN}
+                                    editSize={editSize}
+                                    setEditSize={setEditSize}
+                                    editQuality={editQuality}
+                                    setEditQuality={setEditQuality}
+                                    editBrushSize={editBrushSize}
+                                    setEditBrushSize={setEditBrushSize}
+                                    editShowMaskEditor={editShowMaskEditor}
+                                    setEditShowMaskEditor={setEditShowMaskEditor}
+                                    editGeneratedMaskFile={editGeneratedMaskFile}
+                                    setEditGeneratedMaskFile={setEditGeneratedMaskFile}
+                                    editIsMaskSaved={editIsMaskSaved}
+                                    setEditIsMaskSaved={setEditIsMaskSaved}
+                                    editOriginalImageSize={editOriginalImageSize}
+                                    setEditOriginalImageSize={setEditOriginalImageSize}
+                                    editDrawnPoints={editDrawnPoints}
+                                    setEditDrawnPoints={setEditDrawnPoints}
+                                    editMaskPreviewUrl={editMaskPreviewUrl}
+                                    setEditMaskPreviewUrl={setEditMaskPreviewUrl}
+                                />
+                            </div>
                         </div>
-                        <div className={mode === 'edit' ? 'block h-full w-full' : 'hidden'}>
-                            <EditingForm
-                                onSubmit={handleApiCall}
+                        <div className='flex h-[70vh] min-h-[600px] flex-col lg:col-span-1'>
+                            {error && (
+                                <Alert variant='destructive' className='mb-4 border-red-500/50 bg-red-900/20 text-red-300'>
+                                    <AlertTitle className='text-red-200'>Error</AlertTitle>
+                                    <AlertDescription>{error}</AlertDescription>
+                                </Alert>
+                            )}
+                            <ImageOutput
+                                imageBatch={latestImageBatch}
+                                viewMode={imageOutputView}
+                                onViewChange={setImageOutputView}
+                                altText='Generated image output'
                                 isLoading={isLoading || isSendingToEdit}
+                                onSendToEdit={handleSendToEdit}
                                 currentMode={mode}
-                                onModeChange={setMode}
-                                imageFiles={editImageFiles}
-                                sourceImagePreviewUrls={editSourceImagePreviewUrls}
-                                setImageFiles={setEditImageFiles}
-                                setSourceImagePreviewUrls={setEditSourceImagePreviewUrls}
-                                maxImages={MAX_EDIT_IMAGES}
-                                editPrompt={editPrompt}
-                                setEditPrompt={setEditPrompt}
-                                editN={editN}
-                                setEditN={setEditN}
-                                editSize={editSize}
-                                setEditSize={setEditSize}
-                                editQuality={editQuality}
-                                setEditQuality={setEditQuality}
-                                editBrushSize={editBrushSize}
-                                setEditBrushSize={setEditBrushSize}
-                                editShowMaskEditor={editShowMaskEditor}
-                                setEditShowMaskEditor={setEditShowMaskEditor}
-                                editGeneratedMaskFile={editGeneratedMaskFile}
-                                setEditGeneratedMaskFile={setEditGeneratedMaskFile}
-                                editIsMaskSaved={editIsMaskSaved}
-                                setEditIsMaskSaved={setEditIsMaskSaved}
-                                editOriginalImageSize={editOriginalImageSize}
-                                setEditOriginalImageSize={setEditOriginalImageSize}
-                                editDrawnPoints={editDrawnPoints}
-                                setEditDrawnPoints={setEditDrawnPoints}
-                                editMaskPreviewUrl={editMaskPreviewUrl}
-                                setEditMaskPreviewUrl={setEditMaskPreviewUrl}
+                                baseImagePreviewUrl={editSourceImagePreviewUrls[0] || null}
                             />
                         </div>
                     </div>
-                    <div className='flex h-[70vh] min-h-[600px] flex-col lg:col-span-1'>
-                        {error && (
-                            <Alert variant='destructive' className='mb-4 border-red-500/50 bg-red-900/20 text-red-300'>
-                                <AlertTitle className='text-red-200'>Error</AlertTitle>
-                                <AlertDescription>{error}</AlertDescription>
-                            </Alert>
-                        )}
-                        <ImageOutput
-                            imageBatch={latestImageBatch}
-                            viewMode={imageOutputView}
-                            onViewChange={setImageOutputView}
-                            altText='Generated image output'
-                            isLoading={isLoading || isSendingToEdit}
-                            onSendToEdit={handleSendToEdit}
-                            currentMode={mode}
-                            baseImagePreviewUrl={editSourceImagePreviewUrls[0] || null}
+
+                    <div className='min-h-[450px]'>
+                        <HistoryPanel
+                            history={history}
+                            onSelectImage={handleHistorySelect}
+                            onClearHistory={handleClearHistory}
+                            getImageSrc={getImageSrc}
                         />
                     </div>
                 </div>
-
-                <div className='min-h-[450px]'>
-                    <HistoryPanel
-                        history={history}
-                        onSelectImage={handleHistorySelect}
-                        onClearHistory={handleClearHistory}
-                        getImageSrc={getImageSrc}
-                    />
-                </div>
-            </div>
-        </main>
+            </main>
+        </div>
     );
 }
