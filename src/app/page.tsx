@@ -226,6 +226,7 @@ export default function HomePage() {
         setImageOutputView('grid');
 
         const apiKey = localStorage.getItem('OPENAI_API_KEY');
+        const model = localStorage.getItem('OPENAI_MODEL') || 'gpt-image-1';
         if (!apiKey) {
             setError('请先在设置中配置 OpenAI API Key');
             setIsLoading(false);
@@ -235,6 +236,7 @@ export default function HomePage() {
         const apiFormData = new FormData();
         apiFormData.append('mode', mode);
         apiFormData.append('api_key', apiKey);
+        apiFormData.append('model', model);
 
         if (mode === 'generate') {
             const genData = formData as GenerationFormData;
