@@ -1,5 +1,3 @@
-'use client';
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,19 +7,18 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import * as React from "react";
+import { useEffect, useState } from "react";
 
 interface SettingsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps): React.JSX.Element {
-  const [apiKey, setApiKey] = React.useState("");
-  const [model, setModel] = React.useState("gpt-image-1-all");
+export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
+  const [apiKey, setApiKey] = useState("");
+  const [model, setModel] = useState("gpt-image-1-all");
 
-  React.useEffect(() => {
+  useEffect(() => {
     const savedApiKey = localStorage.getItem("OPENAI_API_KEY");
     const savedModel = localStorage.getItem("OPENAI_MODEL");
     if (savedApiKey) {
@@ -51,16 +48,17 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps): Rea
               id="api-key"
               type="password"
               value={apiKey}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setApiKey(e.target.value)}
+              onChange={(e) => setApiKey(e.target.value)}
               placeholder="输入您的 OpenAI API Key"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="model">模型</Label>
+            <Label htmlFor="model">Model</Label>
             <Input
               id="model"
+              type="text"
               value={model}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setModel(e.target.value)}
+              onChange={(e) => setModel(e.target.value)}
               placeholder="输入模型名称"
             />
           </div>
