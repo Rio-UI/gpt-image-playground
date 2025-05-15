@@ -19,7 +19,7 @@ interface SettingsDialogProps {
 
 export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps): React.JSX.Element {
   const [apiKey, setApiKey] = React.useState("");
-  const [model, setModel] = React.useState("gpt-image-1");
+  const [model, setModel] = React.useState("gpt-image-1-all");
 
   React.useEffect(() => {
     const savedApiKey = localStorage.getItem("OPENAI_API_KEY");
@@ -57,14 +57,12 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps): Rea
           </div>
           <div className="space-y-2">
             <Label htmlFor="model">模型</Label>
-            <Select value={model} onValueChange={setModel}>
-              <SelectTrigger id="model">
-                <SelectValue placeholder="选择模型" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="gpt-image-1">GPT Image 1</SelectItem>
-              </SelectContent>
-            </Select>
+            <Input
+              id="model"
+              value={model}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setModel(e.target.value)}
+              placeholder="输入模型名称"
+            />
           </div>
           <div className="flex items-center justify-between">
             <a
