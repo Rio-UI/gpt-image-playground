@@ -235,7 +235,6 @@ export default function HomePage() {
         const apiFormData = new FormData();
         apiFormData.append('mode', mode);
         apiFormData.append('api_key', apiKey);
-        apiFormData.append('model', localStorage.getItem('OPENAI_MODEL') || 'gpt-image-1-all');
 
         if (mode === 'generate') {
             const genData = formData as GenerationFormData;

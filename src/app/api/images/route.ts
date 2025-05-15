@@ -65,17 +65,15 @@ export async function POST(request: NextRequest) {
 
         const mode = formData.get('mode') as 'generate' | 'edit' | null;
         const prompt = formData.get('prompt') as string | null;
-        const model = formData.get('model') as string | null;
 
-        console.log(`Mode: ${mode}, Prompt: ${prompt ? prompt.substring(0, 50) + '...' : 'N/A'}, Model: ${model || 'default'}`);
+        console.log(`Mode: ${mode}, Prompt: ${prompt ? prompt.substring(0, 50) + '...' : 'N/A'}`);
 
         if (!mode || !prompt) {
             return NextResponse.json({ error: 'Missing required parameters: mode and prompt' }, { status: 400 });
         }
 
         let result: OpenAI.Images.ImagesResponse;
-        const defaultModel = 'gpt-image-1';
-        const effectiveModel = model || defaultModel;
+        const model = 'gpt-image-1';
 
         if (mode === 'generate') {
             const n = parseInt((formData.get('n') as string) || '1', 10);
@@ -90,7 +88,7 @@ export async function POST(request: NextRequest) {
                 (formData.get('moderation') as OpenAI.Images.ImageGenerateParams['moderation']) || 'auto';
 
             const params: OpenAI.Images.ImageGenerateParams = {
-                model: effectiveModel,
+                model,
                 prompt,
                 n: Math.max(1, Math.min(n || 1, 10)),
                 size,
@@ -128,7 +126,7 @@ export async function POST(request: NextRequest) {
             const maskFile = formData.get('mask') as File | null;
 
             const params: OpenAI.Images.ImageEditParams = {
-                model: effectiveModel,
+                model,
                 prompt,
                 image: imageFiles,
                 n: Math.max(1, Math.min(n || 1, 10)),
